@@ -872,117 +872,117 @@ fn echo = (num a) :
 
 `);
 
-// Oak.memory
+Oak.memory;
 
 // BASIC FUNCTION CALLING
 
-// Oak.input(`
+Oak.input(`
 
-// 	add(one, three) + add(echo(one), three)
+	add(one, three) + add(echo(one), three)
 
-// `)
+`);
 
 // BASIC IF / ELSE STATEMENTS
 
-// Oak.input(`
+Oak.input(`
 
-// 	if 3 == 3 :
-// 		print("First!")
-// 	: elsif echo(one) == 1 :
-// 		print("Second!")
-// 	: else :
-// 		print("Third!")
-// 	:
+	if 3 == 3 :
+		print("First!")
+	: elsif echo(one) == 1 :
+		print("Second!")
+	: else :
+		print("Third!")
+	:
 
-// `)
+`);
 
 // BASIC FROM TO LOOPS
 
-// Oak.input(`
+Oak.input(`
 
-// 	from 0 to 6 with i :
-// 		num currentIndexValue = index(array, i)
-// 		print(currentIndexValue)
-// 	:
+	from 0 to 6 with i :
+		num currentIndexValue = index(array, i)
+		print(currentIndexValue)
+	:
 
-// `)
+`);
 
 // NESTED FROM TO LOOPS
 
-// Oak.input(`
+Oak.input(`
 
-// 	from 1 to 3 with i :
-// 		from 1 to 3 with j :
-// 			from 1 to 3 with k :
-// 				print(i, j, k)
-// 			:
-// 		:
-// 	:
+	from 1 to 3 with i :
+		from 1 to 3 with j :
+			from 1 to 3 with k :
+				print(i, j, k)
+			:
+		:
+	:
 
-// `)
+`);
 
 // FIZZBUZZ
 
-// Oak.input(`
+Oak.input(`
 
-// 	fn fizzBuzz = (num n) :
-// 		from 1 to n with i :
-// 			if i % 15 == 0 :
-// 				print("FizzBuzz")
-// 			: elsif i % 5 == 0 :
-// 				print("Buzz")
-// 			: elsif i % 3 == 0 :
-// 				print("Fizz")
-// 			: else :
-// 				print(i)
-// 			:
-// 		:
-// 	:
+	fn fizzBuzz = (num n) :
+		from 1 to n with i :
+			if i % 15 == 0 :
+				print("FizzBuzz")
+			: elsif i % 5 == 0 :
+				print("Buzz")
+			: elsif i % 3 == 0 :
+				print("Fizz")
+			: else :
+				print(i)
+			:
+		:
+	:
 
-// `)
+`);
 
-// Oak.input(`
+Oak.input(`
 
-// 	fizzBuzz(35)
+	fizzBuzz(35)
 
-// `)
+`);
 
 // RECURSION & FIBONACCI
 
-// Oak.input(`
+Oak.input(`
 
-// 	fn fib = (num n) :
-// 		if n == 1 :
-// 			=> 0
-// 		: elsif n == 2 :
-// 			=> 1
-// 		: else :
-// 			=> fib(n - 1) + fib(n - 2)
-// 		:
-// 	:
+	fn fib = (num n) :
+		if n == 1 :
+			=> 0
+		: elsif n == 2 :
+			=> 1
+		: else :
+			=> fib(n - 1) + fib(n - 2)
+		:
+	:
 
-// `);
+`);
 
-// Oak.input(`
+Oak.input(`
 
-// 	from 1 to 15 with i :
-// 		print(i, fib(i))
-// 	:
+	from 1 to 15 with i :
+		print(i, fib(i))
+	:
 
-// `);
+`);
 
 // ORDER OF OPERATIONS
 
-// Oak.input(`
+Oak.input(`
 
-// 	fn alwaysTwo = (num n) :
-// 		=> ((((n + 47 % (19 * add(-3, 5))) * echo(three - one) - 4) / fib(4) - n + fib(echo(10)) - 29) * 3 - 9) / 3 - (((n + 109 % 10) * 2 - 4) / 2 - n)
-// 	:
+	fn alwaysTwo = (num n) :
+		=> ((((n + 47 % (19 * add(-3, 5))) * echo(three - one) - 4) / fib(4) - n + fib(echo(10)) - 29) * 3 - 9) / 3 - (((n + 109 % 10) * 2 - 4) / 2 - n)
+	:
 
-// `)
+`);
 
-// Oak.input(`
+Oak.input(`
 
-// 	alwaysTwo(4751)
+	alwaysTwo(4751)
 
-// `)
+`);

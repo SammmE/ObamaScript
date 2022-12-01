@@ -1,0 +1,20 @@
+{
+    "name": "gayscript",
+    "version": "1.0.0",
+    "description": "",
+    "type": "commonjs",
+    "main": "/compiler/interpreter.js",
+    "scripts": {
+        "test": "node /compiler/interpreter.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/SammmE/GayScript.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/SammmE/GayScript/issues"
+    },
+    "homepage": "https://github.com/SammmE/GayScript#readme"
+}
