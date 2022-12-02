@@ -2,31 +2,33 @@ const fs = require("fs");
 
 // enums
 const FILE = "./main.gay";
-const INF = "INF";
+const INF = -1;
 const ANY = "ANY";
 
 // functions
-class Param {
-    constructor(name, type) {
-        this.name = name;
-        this.type = type;
-    }
-
-    isInf() {
-        return this.type == INF ? true : false;
-    }
-}
-
 class Func {
     constructor(name, isJS, method, params) {
         this.name = name;
         this.isJS = isJS;
         this.method = method;
-        this.params = [];
-        params.forEach((element) => {
-            this.params.push(new Param(element.name, element.type));
-        });
+        this.params = params;
     }
+
+    getName = () => {
+        return this.name;
+    };
+
+    getParams = () => {
+        return this.params;
+    };
+
+    getMethod = () => {
+        return this.method;
+    };
+
+    getIsJS = () => {
+        return this.isJS;
+    };
 }
 
 // errors
@@ -45,8 +47,8 @@ class NoOpeningParenthesis extends Error {
 }
 
 let memory = {
-    functions: [
-        new Func(
+    functions: {
+        print: new Func(
             "print",
             true,
             (...args) => {
@@ -54,9 +56,9 @@ let memory = {
                     console.log(elem);
                 });
             },
-            [INF]
+            INF
         ),
-    ],
+    },
     variables: [],
     classes: [],
 };
@@ -81,7 +83,7 @@ class Interpreter {
     };
 
     openingParen = () => {
-        return this.code[1] === "(";
+        return this.code[1] == "(";
     };
 
     variableKwd = (inter) => {
@@ -104,13 +106,17 @@ class Interpreter {
         return ["+", "-", "*", "/", "^", "%"].includes(inter);
     };
 
-    goUntil = (stop, retType) => {
+    stringKwd = (inter) => {
+        return ['"', "'", "`"].includes(inter);
+    };
+
+    goUntil = (arr, stop, retType) => {
         if (stop == "}") {
             var openingBraceCounter = 1;
             var retArr = [];
-            var arrayLength = this.code.length;
+            var arrayLength = arr.length;
             for (var i = 0; i < arrayLength; i++) {
-                checking = this.code[i];
+                var checking = arr[i];
                 if (checking == stop) {
                     openingBraceCounter -= 1;
                 } else if (checking == "{") {
@@ -134,15 +140,16 @@ class Interpreter {
         } else if (stop == ")") {
             var openingParenCounter = 1;
             var retArr = [];
-            var arrayLength = this.code.length;
-            for (var i = 0; i < arrayLength; i++) {
-                checking = this.code[i];
+            var arrayLength = arr.length;
+            for (var i = 1; i < arrayLength; i++) {
+                var checking = arr[i];
                 if (checking == stop) {
                     openingParenCounter -= 1;
                 } else if (checking == "(") {
                     openingParenCounter += 1;
+                } else {
+                    retArr.push(checking);
                 }
-                retArr.push(checking);
                 if (openingParenCounter == 0) {
                     if (retType == "string") {
                         return retArr.join("");
@@ -163,34 +170,47 @@ class Interpreter {
 
     runFunc = () => {
         if (!this.openingParen()) {
+            throw new NoOpeningParenthesis(
+                "Could not find opening parenthesis for calling '" +
+                    this.code[0] +
+                    "'"
+            );
         }
-        runningFunc = this.code[0];
+        var runningFunc = this.code[0];
         this.nextCode();
+        const params = this.goUntil(this.code, ")", "arr");
+        for (var i = 0; i < params.length + 1; i++) {
+            this.nextCode();
+        }
+        this.nextCode();
+        const fun = this.mem.functions[runningFunc];
+        if (fun.isJS) {
+            console.log(params);
+            params = params.filter(function(value, index, arr) {return value != "`" && value != "\'" && })
+            if (fun.params == INF) {
+                fun.method(...params);
+            }
+        }
     };
 
     interpret = () => {
         if (!this.code.length) {
             throw new InterpretingError("No code in " + FILE);
         }
-        while (this.code.length) {
+        while (this.code.length > 0) {
             var inter = this.code[0] || null;
             if (this.variableKwd(inter)) {
                 // this.variableDeclaration();
             } else if (this.conditionKwd(inter)) {
-                console.log("found condition");
                 // let possibleReturnValue = this.conditional();
                 // if (possibleReturnValue !== undefined) return possibleReturnValue;
             } else if (this.loopKwd(inter)) {
-                console.log("found loop");
                 // this.loop();
             } else if (this.retKwd(inter)) {
-                console.log("found return statement");
                 // return this.consumeAndRunUntilBreak();
             } else if (this.expressionKwd(inter)) {
-                console.log("found expression");
                 // let result = this.expression();
             } else {
-                console.log("found function");
                 this.runFunc();
             }
         }
