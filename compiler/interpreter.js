@@ -146,9 +146,9 @@ class Interpreter {
                 }
                 retArr.push(checking);
                 if (openingBraceCounter == 0) {
-                    if (retType == "string") {
+                    if (retType == "string" || retType == "str") {
                         return retArr.join("");
-                    } else if (retType == "arr") {
+                    } else if (retType == "arr" || retType == "array") {
                         return retArr;
                     } else {
                         throw Error(
@@ -173,15 +173,15 @@ class Interpreter {
                     retArr.push(checking);
                 }
                 if (openingParenCounter == 0) {
-                    if (retType == "string") {
+                    if (retType == "string" || retType == "str") {
                         return retArr.join("");
-                    } else if (retType == "arr") {
+                    } else if (retType == "arr" || retType == "array") {
                         return retArr;
                     } else {
                         throw Error(
-                            "Return type " +
+                            "Return type '" +
                                 retType +
-                                " does not exist in interpreter.goUnil"
+                                "' does not exist in interpreter.goUnil"
                         );
                     }
                 }
@@ -204,7 +204,7 @@ class Interpreter {
                 break;
             }
         }
-        return Function(`'use strict'; return (${exp})`)();
+        return Function(`"use strict"; return (${exp})`)();
     };
 
     runFunc = () => {
@@ -217,7 +217,8 @@ class Interpreter {
         }
         var runningFunc = this.code[0];
         this.nextCode();
-        var params = this.goUntil(this.code, ")", "arr");
+        var params = this.goUntil(this.code, ")", "str");
+        var evalParams = [];
         for (var i = 0; i < params.length + 1; i++) {
             this.nextCode();
         }
@@ -227,9 +228,16 @@ class Interpreter {
             // params = params.filter(function (value, index, arr) {
             //     return value != "`" && value != '"' && value != "'";
             // });
-            this.eval(params.join(""), "");
+            params.split(",");
+            if (typeof params == "string") {
+                evalParams.push(this.eval(params));
+            } else {
+                for (var param in params) {
+                    evalParams.push(this.eval(param));
+                }
+            }
             if (fun.params == INF) {
-                fun.method(...params);
+                fun.method(...evalParams);
             }
         }
     };
