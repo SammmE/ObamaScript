@@ -88,6 +88,7 @@ let memory = {
             "print",
             true,
             (...args) => {
+                console.log("print func: ");
                 args.forEach((elem) => {
                     console.log(elem);
                 });
@@ -106,6 +107,7 @@ class Interpreter {
         } else {
             this.code = code;
         }
+        this.typeify([...this.code]);
         this.mem = memory;
     }
 
@@ -115,6 +117,22 @@ class Interpreter {
         return text.split(regex).filter(function (s) {
             return !s.match(/^\s*$/);
         });
+    };
+
+    typeify = (array) => {
+        var res = [];
+        for (var i = 0; i < array.length; i++) {
+            var inter = array[0];
+            if (inter.startsWith('"')) {
+                var str,
+                    del = this.goUntil(array, '"', "str");
+                for (var j = 0; j < del + 2; j++) array.shift();
+                console.log(array);
+            }
+            array.shift();
+        }
+
+        return res;
     };
 
     nextCode = () => {
@@ -182,9 +200,9 @@ class Interpreter {
                 retArr.push(checking);
                 if (openingBraceCounter == 0) {
                     if (retType == "string" || retType == "str") {
-                        return retArr.join("");
+                        return retArr.join(""), i - 1;
                     } else if (retType == "arr" || retType == "array") {
-                        return retArr;
+                        return retArr, i - 1;
                     } else {
                         throw Error(
                             "Return type " +
@@ -209,9 +227,9 @@ class Interpreter {
                 }
                 if (openingParenCounter == 0) {
                     if (retType == "string" || retType == "str") {
-                        return retArr.join("");
+                        return retArr.join(""), i - 1;
                     } else if (retType == "arr" || retType == "array") {
-                        return retArr;
+                        return retArr, i - 1;
                     } else {
                         throw Error(
                             "Return type '" +
@@ -222,6 +240,26 @@ class Interpreter {
                 }
             }
         } else {
+            var retArr = [];
+            var arrLen = arr.length;
+            for (var i = 1; i < arrLen; i++) {
+                var checking = arr[i];
+                if (checking == stop) {
+                    if (retType == "string" || retType == "str") {
+                        return retArr.join(""), i - 1;
+                    } else if (retType == "arr" || retType == "array") {
+                        return retArr, i - 1;
+                    } else {
+                        throw Error(
+                            "Return type '" +
+                                retType +
+                                "' does not exist in interpreter.goUnil"
+                        );
+                    }
+                } else {
+                    retArr.push(checking);
+                }
+            }
         }
     };
 
@@ -264,7 +302,6 @@ class Interpreter {
             //     return value != "`" && value != '"' && value != "'";
             // });
             params = params.split();
-            console.log(params);
             if (typeof params == "string") {
                 evalParams.push(this.eval(params));
             } else {
