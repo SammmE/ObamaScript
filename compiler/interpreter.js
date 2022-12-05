@@ -6,6 +6,34 @@ const FILE = "./main.oba";
 const INF = -1;
 const ANY = "ANY";
 
+// integers
+class Integer {
+    constructor(number) {
+        if (typeof number != "number" || number != INF) {
+            throw new TypeError(`${number} is not a string!`);
+        }
+        this.num = number;
+    }
+
+    toString = () => {
+        return this.num.toString();
+    };
+}
+
+// string
+class String {
+    constructor(str) {
+        if (typeof str != "string" || str != INF) {
+            throw new TypeError(`${str} is not a string!`);
+        }
+        this.str = str;
+    }
+
+    toInt = () => {
+        return parseInt(this.str);
+    };
+}
+
 // functions
 class Func {
     constructor(name, isJS, method, params) {
@@ -44,6 +72,13 @@ class NoOpeningParenthesis extends Error {
     constructor(message) {
         super(message);
         this.name = "NoOpeningParenthesis";
+    }
+}
+
+class TypeError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "TypeError";
     }
 }
 
@@ -228,7 +263,8 @@ class Interpreter {
             // params = params.filter(function (value, index, arr) {
             //     return value != "`" && value != '"' && value != "'";
             // });
-            params.split(",");
+            params = params.split();
+            console.log(params);
             if (typeof params == "string") {
                 evalParams.push(this.eval(params));
             } else {
