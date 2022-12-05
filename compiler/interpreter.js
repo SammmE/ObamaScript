@@ -1,7 +1,8 @@
 const fs = require("fs");
+const { type } = require("os");
 
 // enums
-const FILE = "./main.gay";
+const FILE = "./main.oba";
 const INF = -1;
 const ANY = "ANY";
 
@@ -64,9 +65,12 @@ let memory = {
 };
 
 class Interpreter {
-    constructor(code, memory, fileName) {
-        this.code = this.tokenize(code);
-        this.FILE = fileName;
+    constructor(code, memory) {
+        if (typeof code == "string") {
+            this.code = this.tokenize(code);
+        } else {
+            this.code = code;
+        }
         this.mem = memory;
     }
 
@@ -108,6 +112,24 @@ class Interpreter {
 
     stringKwd = (inter) => {
         return ['"', "'", "`"].includes(inter);
+    };
+
+    funcKwd = (inter) => {
+        var isFunc = false;
+        for (const fun in this.mem.functions) {
+            if (fun == inter) {
+                isFunc = true;
+            }
+        }
+        return isFunc;
+    };
+
+    eval = (text) => {
+        if (typeof text == "string") {
+            text = this.tokenize(text);
+        }
+        const newInterpreter = new Interpreter(text, this.mem);
+        return newInterpreter.interpret();
     };
 
     goUntil = (arr, stop, retType) => {
@@ -168,6 +190,23 @@ class Interpreter {
         }
     };
 
+    expression = () => {
+        var len = this.code.length;
+        var exp = this.code[0];
+        var skip = 0;
+        for (var i = 1; i < len; i++) {
+            var checking = this.code[i];
+            exp += checking.replace("\n", "");
+            if (this.expressionKwd(checking)) {
+                skip += 1;
+            }
+            if (skip == 0) {
+                break;
+            }
+        }
+        return Function(`'use strict'; return (${exp})`)();
+    };
+
     runFunc = () => {
         if (!this.openingParen()) {
             throw new NoOpeningParenthesis(
@@ -178,15 +217,17 @@ class Interpreter {
         }
         var runningFunc = this.code[0];
         this.nextCode();
-        const params = this.goUntil(this.code, ")", "arr");
+        var params = this.goUntil(this.code, ")", "arr");
         for (var i = 0; i < params.length + 1; i++) {
             this.nextCode();
         }
         this.nextCode();
         const fun = this.mem.functions[runningFunc];
         if (fun.isJS) {
-            console.log(params);
-            params = params.filter(function(value, index, arr) {return value != "`" && value != "\'" && })
+            // params = params.filter(function (value, index, arr) {
+            //     return value != "`" && value != '"' && value != "'";
+            // });
+            this.eval(params.join(""), "");
             if (fun.params == INF) {
                 fun.method(...params);
             }
@@ -208,9 +249,9 @@ class Interpreter {
                 // this.loop();
             } else if (this.retKwd(inter)) {
                 // return this.consumeAndRunUntilBreak();
-            } else if (this.expressionKwd(inter)) {
-                // let result = this.expression();
-            } else {
+            } else if (this.expressionKwd(this.code[1])) {
+                return this.expression();
+            } else if (this.funcKwd(inter)) {
                 this.runFunc();
             }
         }
