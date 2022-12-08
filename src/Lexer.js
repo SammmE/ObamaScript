@@ -44,6 +44,7 @@ class Lexer {
                     this.char
                 )
             ) {
+                // TODO: bigger int?
                 tokens.push(new Integer(new String(this.char).toInt()));
             } else if (this.char == "+") {
                 tokens.push(PLUS);
