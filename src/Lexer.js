@@ -11,6 +11,9 @@ const {
     RBRACE,
     LBRACK,
     RBRACK,
+
+    Integer,
+    String,
 } = require("./types.js");
 // exports.Lexer =
 class Lexer {
@@ -36,8 +39,12 @@ class Lexer {
         while (this.char != null) {
             if (this.char == " " || this.char == "\t" || this.char == "\n") {
                 this.advance();
-            } else if () {
-                
+            } else if (
+                ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"].includes(
+                    this.char
+                )
+            ) {
+                tokens.push(new Integer(new String(this.char).toInt()));
             } else if (this.char == "+") {
                 tokens.push(PLUS);
                 this.advance();
@@ -82,5 +89,5 @@ class Lexer {
     };
 }
 
-const lx = new Lexer("+");
+const lx = new Lexer("1234567890");
 console.log(lx.createTokens());

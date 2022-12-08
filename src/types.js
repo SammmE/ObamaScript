@@ -13,7 +13,7 @@ exports.RBRACK = "RBRACK";
 
 exports.String = class String {
     constructor(str) {
-        if (typeof str != "string" || str != INF) {
+        if (typeof str != "string") {
             throw new TypeError(`${str} is not a string!`);
         }
         this.str = str;
@@ -26,7 +26,7 @@ exports.String = class String {
 
 exports.Integer = class Integer {
     constructor(number) {
-        if (typeof number != "number" || number != INF) {
+        if (typeof number != "number") {
             throw new TypeError(`${number} is not a string!`);
         }
         this.num = number;
