@@ -1,30 +1,9 @@
 const fs = require("fs");
+const { Lexer } = require("./Lexer");
+const { Func, Integer } = require("./types");
 
 const FILE = "./main.oba";
-const ANY = "ANY";
 
-// errors
-class InterpretingError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "InterpretingError";
-    }
-}
-
-class NoOpeningParenthesis extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "NoOpeningParenthesis";
-    }
-}
-
-class TypeError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "TypeError";
-    }
-}
-    
 let memory = {
     functions: {
         print: new Func(
@@ -36,7 +15,7 @@ let memory = {
                     console.log(elem);
                 });
             },
-            [...args]
+            [new Integer(Infinity)]
         ),
     },
     variables: [],
@@ -44,9 +23,15 @@ let memory = {
 };
 
 class Interpreter {
-    constructor(code, memory) {}
+    constructor(code, memory) {
+        this.lex = new Lexer(code, memory.functions);
+        this.code = this.lex.createTokens();
+        this.memory = memory;
+    }
 
-    interpret = () => {};
+    interpret = () => {
+        console.log(this.code);
+    };
 }
 
 interpreter = new Interpreter(fs.readFileSync(FILE).toString(), memory);
