@@ -13,12 +13,13 @@ const {
     RBRACK,
 
     Integer,
-    String,
+    Str,
 } = require("./types.js");
 
 exports.Lexer = class Lexer {
     constructor(text, funcs) {
         this.funcs = funcs;
+        ``;
         this.text = text;
         this.pos = -1;
         this.char = null;
@@ -41,7 +42,11 @@ exports.Lexer = class Lexer {
     };
 
     isFunc = (funcName) => {
-        // console.log(this.funcs);
+        if (funcName in this.funcs) {
+            return true;
+        } else {
+            return false;
+        }
     };
 
     createTokens = () => {
@@ -95,18 +100,30 @@ exports.Lexer = class Lexer {
                         num += this.text[i];
                         i++;
                     }
-                    tokens.push(new Integer(new String(num).toInt()));
+                    tokens.push(new Integer(new Str(num).toInt()));
                 } else {
-                    tokens.push(new Integer(new String(this.char).toInt()));
+                    tokens.push(new Integer(new Str(this.char).toInt()));
                 }
-            } else {
+            } else if (
+                this.char == '"' ||
+                this.char == "`" ||
+                this.char == "'"
+            ) {
                 let str = "";
-                while (/([A-Z]|_)\w+/gi.test(this.char)) {
-                console.log(str);
+                this.advance();
+                while (!/(")/gi.test(this.char)) {
                     str += this.char;
                     this.advance();
                 }
-                this.isFunc();
+                tokens.push(new Str(str));
+            } else {
+                let str = "";
+                while (/([A-Z]|_)/gi.test(this.char)) {
+                    str += this.char;
+                    this.advance();
+                }
+                tokens.push(str);
+                tokens.push(LPAREN);
             }
             this.advance();
         }

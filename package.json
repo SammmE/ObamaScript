@@ -3,9 +3,9 @@
     "version": "1.0.0",
     "description": "",
     "type": "commonjs",
-    "main": "/compiler/interpreter.js",
+    "main": "./src/interpreter.js",
     "scripts": {
-        "test": "node /compiler/interpreter.js"
+        "test": "node ./src/interpreter.js"
     },
     "repository": {
         "type": "git",

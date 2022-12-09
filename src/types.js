@@ -11,7 +11,7 @@ exports.RBRACE = "RBRACE";
 exports.LBRACK = "LBRACK";
 exports.RBRACK = "RBRACK";
 
-exports.String = class String {
+exports.Str = class Str {
     constructor(str) {
         if (typeof str != "string") {
             throw new TypeError(`${str} is not a string!`);
