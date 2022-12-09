@@ -37,7 +37,7 @@ exports.Integer = class Integer {
     };
 };
 
-exports.Function = class Func {
+exports.Func = class Func {
     constructor(name, isJS, method, params) {
         this.name = name;
         this.isJS = isJS;
