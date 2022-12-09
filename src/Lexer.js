@@ -15,14 +15,21 @@ const {
     Integer,
     String,
 } = require("./types.js");
-// exports.Lexer =
-class Lexer {
-    constructor(text) {
+
+exports.Lexer = class Lexer {
+    constructor(text, funcs) {
+        this.funcs = funcs;
         this.text = text;
         this.pos = -1;
         this.char = null;
         this.advance();
     }
+
+    changeText = (text) => {
+        this.text = text;
+        this.pos = -1;
+        this.char = null;
+    };
 
     advance = () => {
         this.pos++;
@@ -33,19 +40,16 @@ class Lexer {
         }
     };
 
+    isFunc = (funcName) => {
+        // console.log(this.funcs);
+    };
+
     createTokens = () => {
         const tokens = [];
 
         while (this.char != null) {
             if (this.char == " " || this.char == "\t" || this.char == "\n") {
                 this.advance();
-            } else if (
-                ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"].includes(
-                    this.char
-                )
-            ) {
-                // TODO: bigger int?
-                tokens.push(new Integer(new String(this.char).toInt()));
             } else if (this.char == "+") {
                 tokens.push(PLUS);
                 this.advance();
@@ -82,13 +86,31 @@ class Lexer {
             } else if (this.char == "]") {
                 tokens.push(RBRACK);
                 this.advance();
+            } else if (/^-?\d+$/.test(this.char)) {
+                if (/^-?\d+$/.test(this.text[this.pos + 1])) {
+                    let num = "";
+                    let i = this.pos;
+                    while (/^-?\d+$/.test(this.text[i])) {
+                        this.advance();
+                        num += this.text[i];
+                        i++;
+                    }
+                    tokens.push(new Integer(new String(num).toInt()));
+                } else {
+                    tokens.push(new Integer(new String(this.char).toInt()));
+                }
+            } else {
+                let str = "";
+                while (/([A-Z]|_)\w+/gi.test(this.char)) {
+                console.log(str);
+                    str += this.char;
+                    this.advance();
+                }
+                this.isFunc();
             }
             this.advance();
         }
 
         return tokens;
     };
-}
-
-const lx = new Lexer("1234567890");
-console.log(lx.createTokens());
+};
