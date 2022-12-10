@@ -12,7 +12,7 @@ const {
     LBRACK,
     RBRACK,
 
-    Integer,
+    Num,
     Str,
 } = require("./types.js");
 
@@ -90,9 +90,9 @@ exports.Lexer = class Lexer {
                         num += this.text[i];
                         i++;
                     }
-                    tokens.push(new Integer(new Str(num).toInt()));
+                    tokens.push(new Num(new Str(num).toInt()));
                 } else {
-                    tokens.push(new Integer(new Str(this.char).toInt()));
+                    tokens.push(new Num(new Str(this.char).toInt()));
                 }
             } else if (
                 this.char == '"' ||

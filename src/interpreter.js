@@ -1,25 +1,21 @@
 const { Func } = require("./Func");
 const { Lexer } = require("./Lexer");
-const { Integer } = require("./types");
+const { Num } = require("./types");
+const { Class } = require("./Class");
 
 const FILE = "./main.oba";
 
 let defaultMemory = {
     functions: {
-        print: new Func(
-            "print",
-            true,
-            (...args) => {
-                console.log("print func: ");
-                args.forEach((elem) => {
-                    console.log(elem);
-                });
-            },
-            [new Integer(Infinity)]
-        ),
+        print: printFunc,
     },
-    variables: [],
-    classes: [],
+    classes: [
+        new Class("FileSystem", [
+            new Func("readFile", true, (path) => {
+                return;
+            }),
+        ]),
+    ],
 };
 
 module.exports = class Interpreter {

@@ -24,7 +24,7 @@ exports.Str = class Str {
     };
 };
 
-exports.Integer = class Integer {
+exports.Num = class Num {
     constructor(number) {
         if (typeof number != "number") {
             throw new TypeError(`${number} is not a string!`);
@@ -40,4 +40,3 @@ exports.Integer = class Integer {
         return Number(n) === n && n % 1 !== 0;
     };
 };
-
