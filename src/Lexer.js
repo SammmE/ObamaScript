@@ -17,9 +17,7 @@ const {
 } = require("./types.js");
 
 exports.Lexer = class Lexer {
-    constructor(text, funcs) {
-        this.funcs = funcs;
-        ``;
+    constructor(text) {
         this.text = text;
         this.pos = -1;
         this.char = null;
@@ -38,14 +36,6 @@ exports.Lexer = class Lexer {
             this.char = this.text[this.pos];
         } else {
             this.char = null;
-        }
-    };
-
-    isFunc = (funcName) => {
-        if (funcName in this.funcs) {
-            return true;
-        } else {
-            return false;
         }
     };
 
