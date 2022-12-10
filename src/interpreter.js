@@ -1,5 +1,6 @@
+const { Func } = require("./Func");
 const { Lexer } = require("./Lexer");
-const { Func, Integer } = require("./types");
+const { Integer } = require("./types");
 
 const FILE = "./main.oba";
 
@@ -29,7 +30,7 @@ module.exports = class Interpreter {
         this.lex = new Lexer(code);
         this.code = this.lex.createTokens();
         this.memory = memory;
-        this.que = [];
+        this.queue = [];
     }
 
     interpret = () => {
