@@ -1,10 +1,9 @@
-const fs = require("fs");
 const { Lexer } = require("./Lexer");
 const { Func, Integer } = require("./types");
 
 const FILE = "./main.oba";
 
-let memory = {
+let defaultMemory = {
     functions: {
         print: new Func(
             "print",
@@ -22,9 +21,12 @@ let memory = {
     classes: [],
 };
 
-class Interpreter {
+module.exports = class Interpreter {
     constructor(code, memory) {
-        this.lex = new Lexer(code, memory.functions);
+        if (memory == undefined) {
+            memory = defaultMemory;
+        }
+        this.lex = new Lexer(code);
         this.code = this.lex.createTokens();
         this.memory = memory;
         this.que = [];
@@ -42,7 +44,8 @@ class Interpreter {
             console.log(elm.constructor.name);
         }
     };
-}
 
-interpreter = new Interpreter(fs.readFileSync(FILE).toString(), memory);
-interpreter.interpret();
+    compile = () => {
+        console.log("🚧COMPILE IS STILL BEING BUILT🚧");
+    };
+};
