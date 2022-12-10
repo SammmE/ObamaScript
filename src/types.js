@@ -35,29 +35,9 @@ exports.Integer = class Integer {
     toString = () => {
         return this.num.toString();
     };
-};
 
-exports.Func = class Func {
-    constructor(name, isJS, method, params) {
-        this.name = name;
-        this.isJS = isJS;
-        this.method = method;
-        this.params = params;
-    }
-
-    getName = () => {
-        return this.name;
-    };
-
-    getParams = () => {
-        return this.params;
-    };
-
-    getMethod = () => {
-        return this.method;
-    };
-
-    getIsJS = () => {
-        return this.isJS;
+    isFloat = () => {
+        return Number(n) === n && n % 1 !== 0;
     };
 };
+
