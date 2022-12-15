@@ -1,3 +1,9 @@
+exports.InfiniteArgs = class InfiniteArgs {
+    constructor(argName) {
+        this.argName = argName;
+    }
+};
+
 exports.Func = class Func {
     constructor(name, isJS, method, params) {
         this.name = name;

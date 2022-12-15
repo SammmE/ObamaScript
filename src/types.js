@@ -1,15 +1,18 @@
-exports.PLUS = "PLUS";
-exports.MINUS = "MINUS";
-exports.DIVIDE = "DIVIDE";
-exports.MULTIPLY = "MULTIPLY";
-exports.MOD = "MOD";
-exports.EXPONENT = "EXPONENT";
-exports.LPAREN = "LPAREN";
-exports.RPAREN = "RPAREN";
-exports.LBRACE = "LBRACE";
-exports.RBRACE = "RBRACE";
-exports.LBRACK = "LBRACK";
-exports.RBRACK = "RBRACK";
+exports.Operation = class Operation {};
+
+exports.PLUS = class PLUS extends exports.Operation {};
+exports.MINUS = class MINUS extends exports.Operation {};
+exports.DIVIDE = class DIVIDE extends exports.Operation {};
+exports.MULTIPLY = class MULTIPLY extends exports.Operation {};
+exports.MOD = class MOD extends exports.Operation {};
+exports.EXPONENT = class EXPONENT extends exports.Operation {};
+exports.LPAREN = class LPAREN {};
+exports.RPAREN = class RPAREN {};
+exports.LBRACE = class LBRACE {};
+exports.RBRACE = class PLUS {};
+exports.LBRACK = class PLUS {};
+exports.RBRACK = class PLUS {};
+exports.FUNKWD = class PLUS {};
 
 exports.Str = class Str {
     constructor(str) {

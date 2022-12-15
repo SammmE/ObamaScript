@@ -46,7 +46,9 @@ function checkFileExists(file) {
 
 	if (input.length > 0) {
 		if (fs.existsSync(input[0])) {
-			const interp = new Interpreter(fs.readFileSync(input[0]));
+			const interp = new Interpreter(
+				fs.readFileSync(input[0]).toString('utf-8')
+			);
 			if (run) {
 				if (time) {
 					var startTime = Date.now();

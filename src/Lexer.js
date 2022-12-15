@@ -11,7 +11,6 @@ const {
     RBRACE,
     LBRACK,
     RBRACK,
-
     Num,
     Str,
 } = require("./types.js");
@@ -46,54 +45,53 @@ exports.Lexer = class Lexer {
             if (this.char == " " || this.char == "\t" || this.char == "\n") {
                 this.advance();
             } else if (this.char == "+") {
-                tokens.push(PLUS);
+                tokens.push(new PLUS());
                 this.advance();
             } else if (this.char == "-") {
-                tokens.push(MINUS);
+                tokens.push(new MINUS());
                 this.advance();
             } else if (this.char == "/") {
-                tokens.push(DIVIDE);
+                tokens.push(new DIVIDE());
                 this.advance();
             } else if (this.char == "*") {
-                tokens.push(MULTIPLY);
+                tokens.push(new MULTIPLY());
                 this.advance();
             } else if (this.char == "%") {
-                tokens.push(MOD);
+                tokens.push(new MOD());
                 this.advance();
             } else if (this.char == "^") {
-                tokens.push(EXPONENT);
+                tokens.push(new EXPONENT());
                 this.advance();
             } else if (this.char == "(") {
-                tokens.push(LPAREN);
+                tokens.push(new LPAREN());
                 this.advance();
             } else if (this.char == ")") {
-                tokens.push(RPAREN);
+                tokens.push(new RPAREN());
                 this.advance();
             } else if (this.char == "{") {
-                tokens.push(LBRACE);
+                tokens.push(new LBRACE());
                 this.advance();
             } else if (this.char == "}") {
-                tokens.push(RBRACE);
+                tokens.push(new RBRACE());
                 this.advance();
             } else if (this.char == "[") {
-                tokens.push(LBRACK);
+                tokens.push(new LBRACK());
                 this.advance();
             } else if (this.char == "]") {
-                tokens.push(RBRACK);
+                tokens.push(new RBRACK());
                 this.advance();
-            } else if (/^-?\d+$/.test(this.char)) {
-                if (/^-?\d+$/.test(this.text[this.pos + 1])) {
-                    let num = "";
-                    let i = this.pos;
-                    while (/^-?\d+$/.test(this.text[i])) {
+            } else if (/-?\d/.test(this.char)) {
+                let num = "";
+                let skip = 1;
+                while (skip > 0) {
+                    if (/-?\d/.test(this.char)) {
+                        num += this.char.toString();
                         this.advance();
-                        num += this.text[i];
-                        i++;
+                    } else {
+                        break;
                     }
-                    tokens.push(new Num(new Str(num).toInt()));
-                } else {
-                    tokens.push(new Num(new Str(this.char).toInt()));
                 }
+                tokens.push(new Num(new Str(num).toInt()));
             } else if (
                 this.char == '"' ||
                 this.char == "`" ||
@@ -114,10 +112,9 @@ exports.Lexer = class Lexer {
                 }
                 tokens.push(str);
                 tokens.push(LPAREN);
+                this.advance();
             }
-            this.advance();
         }
-
         return tokens;
     };
 };
